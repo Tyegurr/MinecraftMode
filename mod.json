@@ -1,0 +1,27 @@
+{
+	"geode": "4.10.0",
+	"gd": {
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2074",
+		"ios": "2.2074"
+	},
+	"id": "tyegurr.minecraftmode",
+	"name": "Minecraft Mode",
+	"version": "v1.0.0",
+	"developer": "Tyegurr",
+	"description": "Adds a separate \"Minecraft Mode\" to the game.",
+	"dependencies": {
+		"geode.node-ids": ">=1.21.0"
+	},
+	"resources": {
+		"spritesheets": {
+			"common": [
+				"res/img/*.png"
+			],
+			"blocks": [
+				"res/blocks/*.png"
+			]
+		}
+	}
+}
