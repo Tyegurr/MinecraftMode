@@ -7,3 +7,6 @@ E to place
 
 # How to use
 It's the minecraft looking button in the pause menu
+
+# more important info!
+This mod is currently PC/Mac only! Mobile support will be added in the future!
