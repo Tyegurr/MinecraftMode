@@ -27,4 +27,5 @@ public:
 
     bool isMinecraftModeEnabled();
     void toggleMinecraftMode(bool toggle);
+    void onExitingPlayLayer();
 };

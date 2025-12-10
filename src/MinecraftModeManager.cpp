@@ -23,6 +23,17 @@ void MinecraftModeManager::toggleMinecraftMode(bool toggle) {
         currentWorld = new World();
     }
 }
+void MinecraftModeManager::onExitingPlayLayer() {
+    _isMinecraftMode = false;
+    // putting this in a try/catch clause because i'm insanely paranoid i will fuck something up
+    try {
+        currentWorld->positionsInOrder.clear();
+        currentWorld->rectsInOrder.clear();
+        currentWorld->spritesInOrder.clear();
+    } catch (int ec) {
+        log::warn("Couldn't clean up memory after exiting play layer."); // WHAT DO YOU MEAN YOU'RE PREGNANT!?
+    }
+}
 
 std::vector<std::shared_ptr<BlockMetadata>> MinecraftModeManager::blockMetadatas = {
     SharedBlockMetadata(0, "Dirt", "dirt.png"_spr), SharedBlockMetadata(1, "Grass", "grass.png"_spr), SharedBlockMetadata(2, "Stone", "stone.png"_spr), SharedBlockMetadata(3, "Cobblestone", "cobblestone.png"_spr),

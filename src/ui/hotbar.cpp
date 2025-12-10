@@ -15,6 +15,7 @@ bool Hotbar::init() {
 
     _selectionBoxSprite = CCSprite::createWithSpriteFrameName("plainwhitesquare.png"_spr);
     _selectionBoxSprite->setPosition({ 12.0f, 0.0f });
+    _selectionBoxSprite->setZOrder(8);
     this->addChild(_selectionBoxSprite);
 
     for (int i = 0; i < 9; i++) {
@@ -40,5 +41,7 @@ Hotbar* Hotbar::create() {
     return menu;
 }
 void Hotbar::updateSelectionBox() {
+    // mb im lazy
     _selectionBoxSprite->setPositionX( 12.0f + (MinecraftModeManager::get()->hotbarIdxPlacing * 24.0f) );
+    _selectionBoxSprite->setPositionY( 12.0f );
 }

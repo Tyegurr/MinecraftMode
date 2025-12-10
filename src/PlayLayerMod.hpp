@@ -15,4 +15,8 @@ class $modify(MCPlayLayer, PlayLayer) {
 
         return true;
     }
+    void onExit() {
+        PlayLayer::onExit();
+        MinecraftModeManager::get()->onExitingPlayLayer(); // cleans up any leftover junk in the world class
+    }
 };
