@@ -7,6 +7,12 @@
 using namespace geode::prelude;
 
 class $modify(MCPlayLayer, PlayLayer) {
+    struct Fields {
+        ~Fields() {
+            MinecraftModeManager::get()->onExitingPlayLayer(); // cleans up any leftover junk in the world class
+        }
+    };
+
     bool init(GJGameLevel* level, bool useReplay, bool dontCreateObjects) {
         if (!PlayLayer::init(level, useReplay, dontCreateObjects)) return false;
 
@@ -15,8 +21,7 @@ class $modify(MCPlayLayer, PlayLayer) {
 
         return true;
     }
-    void onExit() {
-        PlayLayer::onExit();
-        MinecraftModeManager::get()->onExitingPlayLayer(); // cleans up any leftover junk in the world class
+    void onQuit() {
+        PlayLayer::onQuit();
     }
 };

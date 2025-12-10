@@ -13,9 +13,11 @@ bool Hotbar::init() {
     _background->setAnchorPoint({ 0.0f, 0.0f });
     this->addChild(_background);
 
-    _selectionBoxSprite = CCSprite::createWithSpriteFrameName("plainwhitesquare.png"_spr);
-    _selectionBoxSprite->setPosition({ 12.0f, 0.0f });
+    _selectionBoxSprite = CCSprite::createWithSpriteFrameName("blockOutline_01_001.png");
+    _selectionBoxSprite->setPosition({ 12.0f, 12.0f });
     _selectionBoxSprite->setZOrder(8);
+    _selectionBoxSprite->setColor({ 128, 128, 128 });
+    _selectionBoxSprite->setScale(0.82f);
     this->addChild(_selectionBoxSprite);
 
     for (int i = 0; i < 9; i++) {

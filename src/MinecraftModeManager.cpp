@@ -31,7 +31,7 @@ void MinecraftModeManager::onExitingPlayLayer() {
         currentWorld->rectsInOrder.clear();
         currentWorld->spritesInOrder.clear();
     } catch (int ec) {
-        log::warn("Couldn't clean up memory after exiting play layer."); // WHAT DO YOU MEAN YOU'RE PREGNANT!?
+        log::warn("Couldn't clean up memory after exiting play layer.");
     }
 }
 

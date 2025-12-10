@@ -10,8 +10,8 @@ void MinecraftOverlay::fitGeom() {
 
     CCLayer* currentBatchLayer = MinecraftModeManager::get()->currentBatchLayer;
 
-    _batchContainer->setPosition({ MinecraftModeManager::get()->currentBatchLayer->getPositionX(), MinecraftModeManager::get()->currentBatchLayer->getPositionY() });
-    _batchContainer->setScale( currentBatchLayer->getScale() );
+    //_batchContainer->setPosition({ MinecraftModeManager::get()->currentBatchLayer->getPositionX(), MinecraftModeManager::get()->currentBatchLayer->getPositionY() });
+    //_batchContainer->setScale( currentBatchLayer->getScale() );
 }
 bool MinecraftOverlay::init() {
     if (!CCMenu::init()) return false;
@@ -26,7 +26,8 @@ bool MinecraftOverlay::init() {
     _batchContainer->setID("batch-container");
     _batchContainer->setAnchorPoint({ 0.0f, 0.0f });
     _batchContainer->setPosition({ 0.0f, 0.0f });
-    this->addChild(_batchContainer);
+    MinecraftModeManager::get()->currentPlayLayer->m_objectLayer->addChild(_batchContainer);
+
 
     _batchContainer->addChild(_selectorSprite);
 
@@ -53,9 +54,11 @@ MinecraftOverlay* MinecraftOverlay::create() {
 }
 
 void MinecraftOverlay::deleteBlockAtPos(cocos2d::CCPoint pos) {
+    CCLayer* currentBatchLayer = MinecraftModeManager::get()->currentBatchLayer;
+
     cocos2d::CCPoint pointRelative = {
-        pos.x,
-        pos.y
+        pos.x / currentBatchLayer->getScale(),
+        pos.y / currentBatchLayer->getScale()
     };
 
     World* currentWorld = MinecraftModeManager::get()->currentWorld;
@@ -65,8 +68,12 @@ void MinecraftOverlay::deleteBlockAtPos(cocos2d::CCPoint pos) {
     int idx = 0;
     CCARRAY_FOREACH(_batchContainer->getChildren(), obj)
     {
+
+        // =======================
+        // I LOVE UNECESSARY LOGIC
+        // =======================
         CCSprite* sprite = typeinfo_cast<CCSprite*>(obj);
-        CCPoint spritePosRelative = { _batchContainer->getPositionX() + sprite->getPositionX(), _batchContainer->getPositionY() + sprite->getPositionY() };
+        CCPoint spritePosRelative = { (currentBatchLayer->getPositionX() / currentBatchLayer->getScale()) + sprite->getPositionX(), (currentBatchLayer->getPositionY() / currentBatchLayer->getScale()) + sprite->getPositionY() };
         CCSize spriteSize = sprite->getContentSize();
         spriteSize.width *= sprite->getScale();
         spriteSize.height *= sprite->getScale();
@@ -91,9 +98,12 @@ void MinecraftOverlay::deleteBlockAtPos(cocos2d::CCPoint pos) {
     }
 }
 void MinecraftOverlay::placeBlockAtPos(int blockId, cocos2d::CCPoint pos) {
+    CCLayer* currentBatchLayer = MinecraftModeManager::get()->currentBatchLayer;
+    float scale = currentBatchLayer->getScale();
+
     cocos2d::CCPoint newPoint = {
-        std::floor(15.0f + std::round((-_batchContainer->getPositionX() + pos.x - 15.0f) / 30.0f) * 30.0f),
-        std::floor(15.0f + std::round((-_batchContainer->getPositionY() + pos.y - 15.0f) / 30.0f) * 30.0f)
+        std::floor(15.0f + std::round((-(currentBatchLayer->getPositionX() / scale) + (pos.x / scale) - 15.0f) / 30.0f) * 30.0f),
+        std::floor(15.0f + std::round((-(currentBatchLayer->getPositionY() / scale) + (pos.y / scale) - 15.0f) / 30.0f) * 30.0f)
     };
 
     World* currentWorld = MinecraftModeManager::get()->currentWorld;
@@ -122,9 +132,11 @@ void MinecraftOverlay::update(float delta) {
     CCPoint mousePos = geode::cocos::getMousePos();
     _crosshairSprite->setPosition(mousePos);
 
+    CCLayer* currentBatchLayer = MinecraftModeManager::get()->currentBatchLayer;
+
     _selectorSprite->setPosition({
-        15.0f + std::round((-_batchContainer->getPositionX() + (mousePos.x / _batchContainer->getScale()) - 15.0f) / 30.0f) * 30.0f,
-        15.0f + std::round((-_batchContainer->getPositionY() + (mousePos.y / _batchContainer->getScale()) - 15.0f) / 30.0f) * 30.0f
+        15.0f + std::round((-(currentBatchLayer->getPositionX() / currentBatchLayer->getScale()) + (mousePos.x / currentBatchLayer->getScale()) - 15.0f) / 30.0f) * 30.0f,
+        15.0f + std::round((-(currentBatchLayer->getPositionY() / currentBatchLayer->getScale()) + (mousePos.y / currentBatchLayer->getScale()) - 15.0f) / 30.0f) * 30.0f
     });
 
     fitGeom();
