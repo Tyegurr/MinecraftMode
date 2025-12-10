@@ -21,12 +21,39 @@ class $modify(KeybaordDispatcherMod, CCKeyboardDispatcher) {
                 MinecraftModeManager::get()->hotbarIdxPlacing = 2;
                 MinecraftModeManager::get()->mcOverlay->getHotbar()->updateSelectionBox();
             }
+            if (key == KEY_Four) {
+                MinecraftModeManager::get()->hotbarIdxPlacing = 3;
+                MinecraftModeManager::get()->mcOverlay->getHotbar()->updateSelectionBox();
+            }
+            if (key == KEY_Five) {
+                MinecraftModeManager::get()->hotbarIdxPlacing = 4;
+                MinecraftModeManager::get()->mcOverlay->getHotbar()->updateSelectionBox();
+            }
+            if (key == KEY_Six) {
+                MinecraftModeManager::get()->hotbarIdxPlacing = 5;
+                MinecraftModeManager::get()->mcOverlay->getHotbar()->updateSelectionBox();
+            }
+            if (key == KEY_Seven) {
+                MinecraftModeManager::get()->hotbarIdxPlacing = 6;
+                MinecraftModeManager::get()->mcOverlay->getHotbar()->updateSelectionBox();
+            }
+            if (key == KEY_Eight) {
+                MinecraftModeManager::get()->hotbarIdxPlacing = 7;
+                MinecraftModeManager::get()->mcOverlay->getHotbar()->updateSelectionBox();
+            }
+            if (key == KEY_Nine) {
+                MinecraftModeManager::get()->hotbarIdxPlacing = 8;
+                MinecraftModeManager::get()->mcOverlay->getHotbar()->updateSelectionBox();
+            }
             if (key == KEY_Q) {
                 // delete
+                if (MinecraftModeManager::get()->isMinecraftModeEnabled() == true)
+                    MinecraftModeManager::get()->mcOverlay->deleteBlockAtPos(geode::cocos::getMousePos());
             }
             if (key == KEY_E) {
                 // place
-                MinecraftModeManager::get()->mcOverlay->placeBlockAtPos(MinecraftModeManager::get()->hotbarIdxPlacing, geode::cocos::getMousePos());
+                if (MinecraftModeManager::get()->isMinecraftModeEnabled() == true)
+                    MinecraftModeManager::get()->mcOverlay->placeBlockAtPos(MinecraftModeManager::get()->hotbarIdxPlacing, geode::cocos::getMousePos());
             }
         }
 

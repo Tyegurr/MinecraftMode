@@ -1,5 +1,6 @@
 #include "HotbarCell.h"
 #include "../MinecraftModeManager.h"
+#include "../Utils.h"
 
 bool HotbarCell::init() {
     if (!CCMenu::init()) return false;
@@ -32,6 +33,6 @@ void HotbarCell::setBlockPreviewToID(int id) {
 
     //_blockPreviewSprite = CCSprite::createWithSpriteFrameName(MinecraftModeManager::blockMetadatas.at(id)->spriteName);
     _blockPreviewSprite->initWithSpriteFrameName(MinecraftModeManager::blockMetadatas.at(id)->spriteName);
-    //_blockPreviewSprite->getTexture()->setAliasTexParameters();
-    //_blockPreviewSprite->setScale(0.55f);  //TODO: multiply by 8
+    Utils::SetNearestFilteringSprite(_blockPreviewSprite);
+    _blockPreviewSprite->setScale(4.4f);
 }

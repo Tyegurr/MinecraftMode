@@ -5,10 +5,10 @@ bool Hotbar::init() {
     if (!CCMenu::init()) return false;
 
     this->setID("item-hotbar");
-    this->setContentSize({ 240.0f, 24.0f });
+    this->setContentSize({ 216.0f, 24.0f });
 
     _background = CCScale9Sprite::createWithSpriteFrameName("plainwhitesquare.png"_spr);
-    _background->setContentSize({ 240.0f, 24.0f });
+    _background->setContentSize({ 216.0f, 24.0f });
     _background->setColor({ 200, 200, 200 });
     _background->setAnchorPoint({ 0.0f, 0.0f });
     this->addChild(_background);

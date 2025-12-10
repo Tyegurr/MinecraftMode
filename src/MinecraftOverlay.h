@@ -19,6 +19,7 @@ protected:
 public:
     static MinecraftOverlay* create();
 
+    void deleteBlockAtPos(cocos2d::CCPoint pos);
     void placeBlockAtPos(int blockId, cocos2d::CCPoint pos);
     void update(float delta);
 

@@ -16,7 +16,7 @@ protected:
 
     std::vector<HotbarCell*> _hotbarCells;
 public:
-    int idsEquipped[9] = { 0, 1, 2, -1, -1, -1, -1, -1, -1 };
+    int idsEquipped[9] = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
     static Hotbar* create();
 

@@ -1,13 +1,17 @@
 #include "MinecraftOverlay.h"
 #include "MinecraftModeManager.h"
 #include <cmath>
+#include "Utils.h"
 
 void MinecraftOverlay::fitGeom() {
     CCSize sceneSize = CCScene::get()->getContentSize();
 
-    _itemHotbar->setPosition({ (sceneSize.width / 2) - 120.0f, 16.0f });
+    _itemHotbar->setPosition({ (sceneSize.width / 2) - 108.0f, 16.0f });
+
+    CCLayer* currentBatchLayer = MinecraftModeManager::get()->currentBatchLayer;
 
     _batchContainer->setPosition({ MinecraftModeManager::get()->currentBatchLayer->getPositionX(), MinecraftModeManager::get()->currentBatchLayer->getPositionY() });
+    _batchContainer->setScale( currentBatchLayer->getScale() );
 }
 bool MinecraftOverlay::init() {
     if (!CCMenu::init()) return false;
@@ -48,17 +52,65 @@ MinecraftOverlay* MinecraftOverlay::create() {
     return menu;
 }
 
-void MinecraftOverlay::placeBlockAtPos(int blockId, cocos2d::CCPoint pos) {
-    //TODO: lets work with the y pos with the batch container as well
-    cocos2d::CCPoint newPoint = {
-        15.0f + std::round((-_batchContainer->getPositionX() + pos.x - 15.0f) / 30.0f) * 30.0f,
-        15.0f + std::round((-_batchContainer->getPositionY() + pos.y - 15.0f) / 30.0f) * 30.0f
+void MinecraftOverlay::deleteBlockAtPos(cocos2d::CCPoint pos) {
+    cocos2d::CCPoint pointRelative = {
+        pos.x,
+        pos.y
     };
+
+    World* currentWorld = MinecraftModeManager::get()->currentWorld;
+
+    // gets every block in our batch container
+    CCObject* obj = NULL;
+    int idx = 0;
+    CCARRAY_FOREACH(_batchContainer->getChildren(), obj)
+    {
+        CCSprite* sprite = typeinfo_cast<CCSprite*>(obj);
+        CCPoint spritePosRelative = { _batchContainer->getPositionX() + sprite->getPositionX(), _batchContainer->getPositionY() + sprite->getPositionY() };
+        CCSize spriteSize = sprite->getContentSize();
+        spriteSize.width *= sprite->getScale();
+        spriteSize.height *= sprite->getScale();
+
+        bool inside = (pointRelative.x >= (spritePosRelative.x - (spriteSize.width / 2)) && pointRelative.x <= ( spritePosRelative.x + (spriteSize.width / 2) )) && (pointRelative.y >= (spritePosRelative.y - (spriteSize.height / 2)) && pointRelative.y <= (spritePosRelative.y + (spriteSize.height / 2)));
+
+        if (inside) {
+            // we must make sure we are not deleting the selector sprite otherwise this will cause a crash
+            if (sprite == _selectorSprite) { idx++; continue; }
+
+            // i forgot why i need all these
+            currentWorld->positionsInOrder.erase(currentWorld->positionsInOrder.begin() + idx);
+            currentWorld->rectsInOrder.erase(currentWorld->rectsInOrder.begin() + idx);
+            currentWorld->spritesInOrder.erase(currentWorld->spritesInOrder.begin() + idx);
+
+            _batchContainer->removeChild(sprite);
+            //sprite->setVisible(false);
+            break;
+        }
+
+        idx++;
+    }
+}
+void MinecraftOverlay::placeBlockAtPos(int blockId, cocos2d::CCPoint pos) {
+    cocos2d::CCPoint newPoint = {
+        std::floor(15.0f + std::round((-_batchContainer->getPositionX() + pos.x - 15.0f) / 30.0f) * 30.0f),
+        std::floor(15.0f + std::round((-_batchContainer->getPositionY() + pos.y - 15.0f) / 30.0f) * 30.0f)
+    };
+
+    World* currentWorld = MinecraftModeManager::get()->currentWorld;
+
+    // we must make sure we don't have more than two objects in the same cell
+    if (std::count(currentWorld->positionsInOrder.begin(), currentWorld->positionsInOrder.end(), newPoint) > 0) return;
 
     CCSprite* sprite = CCSprite::createWithSpriteFrameName(MinecraftModeManager::blockMetadatas.at(blockId)->spriteName);
     sprite->setPosition(newPoint);
-    sprite->setScale(0.94f);
+    sprite->setScale(7.52f);
+    Utils::SetNearestFilteringSprite(sprite);
     _batchContainer->addChild(sprite);
+
+    float f = 3.76f;
+    currentWorld->positionsInOrder.push_back(newPoint);
+    currentWorld->rectsInOrder.push_back({ newPoint.x - (15.0f * f), newPoint.y + (15.0f * f), 30.0f * f, 30.0f * f });
+    currentWorld->spritesInOrder.push_back(sprite);
 
     // TODO: find a viable collision solution
     /*GameObject* GObj = GameObject::createWithKey(blockId);
@@ -71,8 +123,8 @@ void MinecraftOverlay::update(float delta) {
     _crosshairSprite->setPosition(mousePos);
 
     _selectorSprite->setPosition({
-        15.0f + std::round((-_batchContainer->getPositionX() + mousePos.x - 15.0f) / 30.0f) * 30.0f,
-        15.0f + std::round((-_batchContainer->getPositionY() + mousePos.y - 15.0f) / 30.0f) * 30.0f
+        15.0f + std::round((-_batchContainer->getPositionX() + (mousePos.x / _batchContainer->getScale()) - 15.0f) / 30.0f) * 30.0f,
+        15.0f + std::round((-_batchContainer->getPositionY() + (mousePos.y / _batchContainer->getScale()) - 15.0f) / 30.0f) * 30.0f
     });
 
     fitGeom();
