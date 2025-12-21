@@ -43,6 +43,8 @@ Hotbar* Hotbar::create() {
     return menu;
 }
 void Hotbar::updateSelectionBox() {
+    if (MinecraftModeManager::get()->isMinecraftModeEnabled() == false) return; // This fixes crashes and saves lives
+
     // mb im lazy
     _selectionBoxSprite->setPositionX( 12.0f + (MinecraftModeManager::get()->hotbarIdxPlacing * 24.0f) );
     _selectionBoxSprite->setPositionY( 12.0f );

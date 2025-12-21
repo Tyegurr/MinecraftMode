@@ -6,7 +6,7 @@
 	},
 	"id": "tyegurr.minecraftmode",
 	"name": "Minecraft Mode",
-	"version": "v1.0.0",
+	"version": "v1.0.1",
 	"developer": "Tyegurr",
 	"description": "Adds a separate \"Minecraft Mode\" to the game.",
 	"dependencies": {

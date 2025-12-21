@@ -8,7 +8,7 @@ using namespace geode::prelude;
 
 class $modify(KeybaordDispatcherMod, CCKeyboardDispatcher) {
     bool dispatchKeyboardMSG(cocos2d::enumKeyCodes key, bool isKeyDown, bool isKeyRepeat) {
-        if (isKeyDown) {
+        if (isKeyDown && MinecraftModeManager::get()->isMinecraftModeEnabled()) {
             if (key == KEY_One) {
                 MinecraftModeManager::get()->hotbarIdxPlacing = 0;
                 MinecraftModeManager::get()->mcOverlay->getHotbar()->updateSelectionBox();
